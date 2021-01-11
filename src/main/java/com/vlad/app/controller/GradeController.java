@@ -29,15 +29,13 @@ public class GradeController {
 
 	private final GradeRepository gradeRepository;
 	private final SecurityContextProvider securityContextProvider;
-	private final StudentRepository studentRepository;
 	private final EntityManager entityManager;
 
 	public GradeController(GradeRepository gradeRepository,
 			SecurityContextProvider securityContextProvider,
-			StudentRepository studentRepository, EntityManager entityManager) {
+			EntityManager entityManager) {
 		this.gradeRepository = gradeRepository;
 		this.securityContextProvider = securityContextProvider;
-		this.studentRepository = studentRepository;
 		this.entityManager = entityManager;
 	}
 
@@ -71,21 +69,18 @@ public class GradeController {
 				predicates.add("grade.student.id = :student_id");
 				params.put("student_id", student_id);
 			}
+			predicates.add("grade.exam.discipline.professor.user.id = :secure_user_id");
+			params.put("secure_user_id", securityContextProvider.getCurrentContextUser().getId());
 		} else {
-			var student = studentRepository.findByUser(securityContextProvider.getCurrentContextUser());
-			if (student.isEmpty())
-				throw new RuntimeException("Could not determine student from request");
-			else {
-				predicates.add("grade.student.id = :student_id");
-				params.put("student_id", student.get().getId());
-			}
+			predicates.add("grade.student.user.id = :secure_user_id");
+			params.put("secure_user_id", securityContextProvider.getCurrentContextUser().getId());
 		}
 		if (exam_id != null) {
 			predicates.add("grade.exam.id = :exam_id");
 			params.put("exam_id",exam_id);
 		}
 		if (discipline_id != null) {
-			predicates.add(" grade.exam.discipline.id = :disc_id");
+			predicates.add(" rade.exam.discipline.id = :disc_id");
 			params.put("disc_id", discipline_id);
 		}
 		return new QueryBuilder<Grade>()

@@ -77,7 +77,7 @@ public class AdminController {
 		if (!(Objects.equals(file.getContentType(), "text/csv") ||
 				Objects.equals(file.getContentType(), "application/vnd.ms-excel"))) {
 			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-					.body(new ApiResponse(false, "File must be of csv or MS Excel type"));
+					.body(new ApiResponse(false, "File must be of csv type"));
 		}
 		return ResponseEntity.ok().body(new ApiResponse(true,
 				String.format("Inserted or Updated %s records", uploadFunction.apply(file))));

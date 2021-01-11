@@ -61,34 +61,28 @@ public class ExamController {
 	@PreAuthorize("hasAnyRole('PROFESSOR','STUDENT')")
 	@GetMapping(value = "/list")
 	public List<Exam> list(@RequestParam(required = false) String discipline_id) {
-		if(securityContextProvider.getCurrentContextUser().getUserType().equals(UserType.PROFESSOR)) {
-			if (discipline_id != null)
-				return examRepository.findAllByDisciplineId(discipline_id);
-			else
-				return examRepository.findAll();
+		var query = "SELECT exam FROM Exam exam ";
+		Map<String, Object> params = new LinkedHashMap<>();
+		List<String> predicates = new ArrayList<>();
+		if (securityContextProvider.getCurrentContextUser().getUserType().equals(UserType.PROFESSOR)) {
+			predicates.add("exam.discipline.professor.user.id = :secure_user_id");
+			params.put("secure_user_id", securityContextProvider.getCurrentContextUser().getId());
+			if (discipline_id != null) {
+				predicates.add("exam.discipline.id=:disc_id");
+				params.put("disc_id", discipline_id);
+			}
 		} else {
-			var student = studentRepository.findByUser(securityContextProvider.getCurrentContextUser());
-			if (student.isEmpty())
-				throw new RuntimeException("Could not determine student from request");
-			else {
-				var query = "SELECT exam FROM Exam exam " ;
-				Map<String, Object> params = new LinkedHashMap<>();
-				List<String> predicates = new ArrayList<>();
-
-				predicates.add(" exam.id IN " +
-						" (SELECT grade.exam.id FROM Grade grade " +
-						"  WHERE grade.student.id = :student_id) ");
-				params.put("student_id", student.get().getId());
-
-				if (discipline_id != null) {
-					predicates.add(" exam.discipline.id = :disc_id");
-					params.put("disc_id", discipline_id);
-				}
-
-				return new QueryBuilder<Exam>()
-						.buildTypedQuery(query, params, predicates, entityManager, Exam.class)
-						.getResultList();
+			predicates.add(" exam.id IN " +
+					" (SELECT grade.exam.id FROM Grade grade " +
+					"  WHERE grade.student.user.id = :secure_user_id) ");
+			params.put("secure_user_id", securityContextProvider.getCurrentContextUser().getId());
+			if (discipline_id != null) {
+				predicates.add(" exam.discipline.id = :disc_id");
+				params.put("disc_id", discipline_id);
 			}
 		}
+		return new QueryBuilder<Exam>()
+				.buildTypedQuery(query, params, predicates, entityManager, Exam.class)
+				.getResultList();
 	}
 }

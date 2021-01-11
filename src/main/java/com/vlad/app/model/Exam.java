@@ -1,9 +1,5 @@
 package com.vlad.app.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vlad.app.deserializers.DisciplineDeserializer;
 import lombok.AllArgsConstructor;
@@ -11,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,7 +39,6 @@ public class Exam extends Auditable<User> {
 
 	@Column(name = "exam_date")
 	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
 	private Date examDate;
 
 	@Column
@@ -55,7 +49,6 @@ public class Exam extends Auditable<User> {
 	@JsonDeserialize(using = DisciplineDeserializer.class)
 	private Discipline discipline;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private Set<Grade> grades = Set.of();
 

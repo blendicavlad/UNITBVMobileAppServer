@@ -5,7 +5,6 @@ Authorization: Bearer {{temp_token}}
 
 {
   "mark": 10,
-  "examDate": "2021-01-10 12:55:09",
-  "exam": 2,
+  "exam": 1,
   "student": 1
 }

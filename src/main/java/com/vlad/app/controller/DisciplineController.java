@@ -3,10 +3,10 @@ package com.vlad.app.controller;
 import com.vlad.app.model.Discipline;
 import com.vlad.app.model.UserType;
 import com.vlad.app.repository.DisciplineRepository;
+import com.vlad.app.repository.StudentRepository;
 import com.vlad.app.security.SecurityContextProvider;
 import com.vlad.app.utils.QueryBuilder;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,16 +20,18 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("disciplines")
-@PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
 public class DisciplineController {
 
 	final private DisciplineRepository disciplineRepository;
+	final private StudentRepository studentRepository;
 	final private EntityManager entityManager;
 	final private SecurityContextProvider securityContextProvider;
 
-	public DisciplineController(DisciplineRepository disciplineRepository, EntityManager entityManager,
+	public DisciplineController(DisciplineRepository disciplineRepository,
+			StudentRepository studentRepository, EntityManager entityManager,
 			SecurityContextProvider securityContextProvider) {
 		this.disciplineRepository = disciplineRepository;
+		this.studentRepository = studentRepository;
 		this.entityManager = entityManager;
 		this.securityContextProvider = securityContextProvider;
 	}
@@ -62,6 +64,10 @@ public class DisciplineController {
 		if (securityContextProvider.getCurrentContextUser().getUserType().equals(UserType.PROFESSOR)) {
 			predicates.add("discipline.professor.user.id = :secure_prof_id");
 			params.put("secure_prof_id", securityContextProvider.getCurrentContextUser().getId());
+		} else if (securityContextProvider.getCurrentContextUser().getUserType().equals(UserType.STUDENT)) {
+			predicates.add("discipline IN (SELECT student.group.clss.specialization.disciplines " +
+					"from Student student where student.user.id=:secure_stud_id)");
+			params.put("stud_id", securityContextProvider.getCurrentContextUser().getId());
 		}
 		return new QueryBuilder<Discipline>()
 				.buildTypedQuery(query, params, predicates, entityManager, Discipline.class)
