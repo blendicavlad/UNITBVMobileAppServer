@@ -1,9 +1,9 @@
 spring:
   datasource:
     initialization-mode: always
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DB:android}?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
-    username: ${MYSQL_USERNAME:root}
-    password: ${MYSQL_USERNAME:cataclysm91}
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DB}?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_USERNAME}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -24,10 +24,10 @@ spring:
       max-request-size: ${MAX_REQUEST_SIZE:300MB}
 
   mail:
-    host: ${MAIL_HOST:smtp.gmail.com}
-    port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME:blendicav@gmail.com}
-    password: ${MAIL_PASSWORD:wxydcauzgxrmawui}
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -41,9 +41,6 @@ app:
     tokenSecret: ${TOKEN_SECRET:926D96C90030DD58429D2751AC1BDBBC}
     tokenExpirationMsec: 3600000
 
-  oauth2:
-    authorizedRedirectUris:
-      - ${REDIRECT_URI_01:http://localhost:3000/oauth2/redirect}
 
 file:
   upload-dir: users
