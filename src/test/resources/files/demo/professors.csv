@@ -1,0 +1,4 @@
+CNP;firstName;lastName;Email;Provider;isAdmin;userType
+1234567891234;Andrei;David;blendicav@gmail.com;Local;FALSE;Professor
+1234567891235;Maria;Popovici;m.popovic12323i@gmail.com;Local;FALSE;Professor
+1234567891236;Dorin;Alexandrescu;d.alexa42asndrescu@gmail.com;Local;FALSE;Professor

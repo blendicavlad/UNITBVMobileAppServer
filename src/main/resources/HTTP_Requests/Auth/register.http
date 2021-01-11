@@ -1,0 +1,12 @@
+POST {{local_url}}/auth/signup
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{temp_token}}
+
+{
+  "firstName" : "{{first_name}}",
+  "lastName" : "{{last_name}}",
+  "email" : "test@gmail.com",
+  "password" : "test",
+  "userType" : "ADMIN"
+}

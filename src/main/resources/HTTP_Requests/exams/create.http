@@ -1,0 +1,9 @@
+POST {{local_url}}/exams/create
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{temp_token}}
+
+{
+  "examDate": "2021-01-10 12:55:09",
+  "discipline": "SAL01"
+}

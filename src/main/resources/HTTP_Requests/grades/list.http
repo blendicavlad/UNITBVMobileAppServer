@@ -1,0 +1,4 @@
+GET {{local_url}}/grades/list
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{temp_token}}

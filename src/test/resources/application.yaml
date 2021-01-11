@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    initialization-mode: always
+    url: jdbc:h2:mem:myDb;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: create-drop
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+  mail:
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:3025}
+    username: ${MAIL_USERNAME:blendicav@gmail.com}
+    password: ${MAIL_PASSWORD:wxydcauzgxrmawui}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug: true
+
+app:
+  auth:
+    tokenSecret: ${TOKEN_SECRET:926D96C90030DD58429D2751AC1BDBBC}
+    tokenExpirationMsec: 3600000
+
+logging:
+  level:
+    org:
+      hibernate:
+        type: error
+        SQL: error
+
+
+init:
+  loadmock: false
+  userpass: ${INIT_USERPASS:parola}
