@@ -65,9 +65,11 @@ public class DisciplineController {
 			predicates.add("discipline.professor.user.id = :secure_prof_id");
 			params.put("secure_prof_id", securityContextProvider.getCurrentContextUser().getId());
 		} else if (securityContextProvider.getCurrentContextUser().getUserType().equals(UserType.STUDENT)) {
-			predicates.add("discipline IN (SELECT student.group.clss.specialization.disciplines " +
-					"from Student student where student.user.id=:secure_stud_id)");
-			params.put("stud_id", securityContextProvider.getCurrentContextUser().getId());
+			predicates.add("discipline IN :disc_set");
+			params.put("disc_set", entityManager.createQuery("SELECT student.group.clss.specialization.disciplines " +
+					"FROM Student student WHERE student.user.id = :secure_stud_id")
+					.setParameter("secure_stud_id", securityContextProvider.getCurrentContextUser().getId())
+					.getResultList());
 		}
 		return new QueryBuilder<Discipline>()
 				.buildTypedQuery(query, params, predicates, entityManager, Discipline.class)

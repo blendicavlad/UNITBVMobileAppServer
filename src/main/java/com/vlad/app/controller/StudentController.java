@@ -42,7 +42,7 @@ public class StudentController {
 			predicates.add("student.group.id IN (SELECT group.id from Group group " +
 					"where group.clss.specialization.disciplines in " +
 					"(SELECT professor.disciplines from Professor professor" +
-					" where professor.user.id = :secure_prof_id))");
+					" where professor.user.id = :secure_user_id))");
 			params.put("secure_user_id", securityContextProvider.getCurrentContextUser().getId());
 			if (cnp != null) {
 				predicates.add("student.cnp=:cnp");
