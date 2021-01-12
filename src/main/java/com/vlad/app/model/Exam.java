@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -52,4 +53,8 @@ public class Exam extends Auditable<User> {
 	@OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private Set<Grade> grades = Set.of();
 
+	@PreRemove
+	private void removeEducationFromUsersProfile() {
+		discipline.getExams().remove(this);
+	}
 }

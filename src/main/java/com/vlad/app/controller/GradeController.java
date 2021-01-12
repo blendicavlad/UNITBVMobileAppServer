@@ -42,6 +42,19 @@ public class GradeController {
 	@PreAuthorize("hasRole('PROFESSOR')")
 	@PostMapping(value = "/create", consumes = { "application/json" })
 	public Grade create(@RequestBody Grade grade) {
+		if (grade.getMark() < 0 || grade.getMark() > 10) {
+			throw new RuntimeException("Mark out of bounds (0-10)");
+		}
+		if (grade.getId() != null) {
+			var grd = gradeRepository.findById(grade.getId());
+			if (grd.isPresent()) {
+				var x = grd.get();
+				x.setMark(grade.getMark());
+				return gradeRepository.save(x);
+			} else {
+				throw new RuntimeException("Grade with id: " + grade.getId() + " not found");
+			}
+		}
 		return gradeRepository.save(grade);
 	}
 
@@ -70,17 +83,16 @@ public class GradeController {
 				params.put("student_id", student_id);
 			}
 			predicates.add("grade.exam.discipline.professor.user.id = :secure_user_id");
-			params.put("secure_user_id", securityContextProvider.getCurrentContextUser().getId());
 		} else {
 			predicates.add("grade.student.user.id = :secure_user_id");
-			params.put("secure_user_id", securityContextProvider.getCurrentContextUser().getId());
 		}
+		params.put("secure_user_id", securityContextProvider.getCurrentContextUser().getId());
 		if (exam_id != null) {
 			predicates.add("grade.exam.id = :exam_id");
 			params.put("exam_id",exam_id);
 		}
 		if (discipline_id != null) {
-			predicates.add(" rade.exam.discipline.id = :disc_id");
+			predicates.add("grade.exam.discipline.id = :disc_id");
 			params.put("disc_id", discipline_id);
 		}
 		return new QueryBuilder<Grade>()

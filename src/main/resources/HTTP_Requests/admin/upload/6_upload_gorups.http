@@ -1,4 +1,4 @@
-POST {{luci_url}}/admin/upload_groups
+POST {{local_url}}/admin/upload_groups
 Authorization: Bearer {{temp_token}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 

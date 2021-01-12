@@ -24,7 +24,9 @@ import com.vlad.app.service.email.EmailServiceImpl;
 import com.vlad.app.service.parsing.CSVParserFactory;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.text.RandomStringGenerator;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,8 +35,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Component
 @Log4j2
@@ -204,7 +206,9 @@ public class AdminDataHandlingService {
 							stud.getUser().setEmail(student.getUser().getEmail());
 							stud.getUser().setFirstName(student.getUser().getFirstName());
 							stud.getUser().setLastName(student.getUser().getLastName());
+							stud.setGroup(student.getGroup());
 							studentRepository.save(stud);
+							log.info("updated student: " + student.toString());
 						}), () -> {
 							student.getUser().setUserType(UserType.STUDENT);
 							var password = generateRandomPassword();
@@ -227,7 +231,6 @@ public class AdminDataHandlingService {
 						}
 				).collect(Collectors.counting()).intValue();
 	}
-
 
 	public String wipeData(boolean wipeDevData) {
 		try {
@@ -276,11 +279,16 @@ public class AdminDataHandlingService {
 	}
 
 	private String generateRandomPassword() {
-		return new RandomStringGenerator.Builder()
-				.selectFrom(new String(IntStream.rangeClosed(32, 126).toArray(), 0, 95).toCharArray())
-				.withinRange(10, 30)
-				.build()
-				.generate(15);
+		var passwordGenerator = new PasswordGenerator();
+		var rules = List.of(
+					EnglishCharacterData.LowerCase,
+					EnglishCharacterData.Alphabetical,
+					EnglishCharacterData.UpperCase,
+					EnglishCharacterData.Digit)
+				.stream()
+				.map(CharacterRule::new)
+				.collect(Collectors.toList());
+		return passwordGenerator.generatePassword(10, rules);
 	}
 
 }

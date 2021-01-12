@@ -1,9 +1,7 @@
 package com.vlad.app.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.vlad.app.deserializers.DisciplineDeserializer;
 import com.vlad.app.deserializers.ExamDeserializer;
 import com.vlad.app.deserializers.StudentDeserializer;
 import com.vlad.app.jsonconverters.ExamJSONConverter;
@@ -22,6 +20,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 
 @Entity
@@ -38,7 +37,7 @@ public class Grade extends Auditable<User> {
 	@Column(nullable = false, length = 2)
 	private int mark;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "exam_id", referencedColumnName = "id")
 	@JsonDeserialize(using = ExamDeserializer.class)
 	@JsonSerialize(converter = ExamJSONConverter.class)
@@ -50,4 +49,10 @@ public class Grade extends Auditable<User> {
 	@JsonSerialize(converter = StudentJSONConverter.class)
 	private Student student;
 
+
+	@PreRemove
+	private void removeEducationFromUsersProfile() {
+		exam.getGrades().remove(this);
+		student.getGrades().remove(this);
+	}
 }

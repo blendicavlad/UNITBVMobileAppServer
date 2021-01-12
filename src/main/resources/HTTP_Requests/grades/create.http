@@ -4,7 +4,8 @@ Content-Type: application/json
 Authorization: Bearer {{temp_token}}
 
 {
-  "mark": 10,
+  "id": 2,
+  "mark": 7,
   "exam": 1,
   "student": 1
 }

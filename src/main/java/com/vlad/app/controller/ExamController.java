@@ -43,6 +43,22 @@ public class ExamController {
 	@PreAuthorize("hasRole('PROFESSOR')")
 	@PostMapping(value = "/create", consumes = { "application/json" })
 	public Exam create(@RequestBody Exam exam) {
+		if (exam.getExamDate() == null) {
+			throw new RuntimeException("Date cannot be null");
+		}
+		if (exam.getExamDate().getTime() < System.currentTimeMillis()) {
+			throw new RuntimeException("Date cannot be lower than now");
+		}
+		if (exam.getId() != null) {
+			var examOptional = examRepository.findById(exam.getId());
+			if (examOptional.isPresent()) {
+				var x = examOptional.get();
+				x.setExamDate(exam.getExamDate());
+				return examRepository.save(x);
+			} else {
+				throw new RuntimeException("Exam with id: " + exam.getId() + " not found");
+			}
+		}
 		return examRepository.save(exam);
 	}
 

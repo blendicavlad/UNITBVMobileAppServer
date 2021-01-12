@@ -1,4 +1,4 @@
-GET {{local_url}}/grades/list
+GET {{local_url}}/grades/list?discipline_id=SAL01&exam_id=1
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{temp_token}}

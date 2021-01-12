@@ -1,4 +1,4 @@
-POST {{local_url}}/admin/wipe_data?wipeDevData=false
+POST {{local_url}}/grades/delete?grade_id=1
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{temp_token}}
