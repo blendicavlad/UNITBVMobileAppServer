@@ -51,7 +51,6 @@ public class Student extends Auditable<User> {
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false)
 	@CsvRecurse
-	@JsonSerialize(converter = UserJSONConverter.class)
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)

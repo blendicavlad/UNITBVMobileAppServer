@@ -1,7 +1,7 @@
 package com.vlad.app.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.vlad.app.deserializers.DisciplineDeserializer;
+import com.vlad.app.serializers.DisciplineDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

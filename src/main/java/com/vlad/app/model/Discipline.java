@@ -6,7 +6,7 @@ import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvCustomBindByName;
 import com.vlad.app.csvconverters.ProfessorConverter;
 import com.vlad.app.csvconverters.SpecializationConverter;
-import com.vlad.app.deserializer.DisciplineSerializer;
+import com.vlad.app.deserializers.DisciplineSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

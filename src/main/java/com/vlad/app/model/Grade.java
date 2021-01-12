@@ -2,8 +2,8 @@ package com.vlad.app.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.vlad.app.deserializers.ExamDeserializer;
-import com.vlad.app.deserializers.StudentDeserializer;
+import com.vlad.app.serializers.ExamDeserializer;
+import com.vlad.app.serializers.StudentDeserializer;
 import com.vlad.app.jsonconverters.ExamJSONConverter;
 import com.vlad.app.jsonconverters.StudentJSONConverter;
 import lombok.Getter;

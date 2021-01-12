@@ -1,9 +1,8 @@
-package com.vlad.app.deserializers;
+package com.vlad.app.serializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.vlad.app.exception.ResourceNotFoundException;
 import com.vlad.app.model.Exam;
